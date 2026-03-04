@@ -49,7 +49,15 @@ class DQNAgent:
         """
         if self.use_double:
             # YOUR IMPLEMENTATION HERE
-            raise NotImplementedError
+            q_next_values_online = self.q_net(next_state) # (B, A)
+            best_actions = q_next_values_online.argmax(dim=1).unsqueeze(1) # (B, 1)
+
+            q_next_values_target = self.target_net(next_state) # (B, A)
+            q_next_max = q_next_values_target.gather(1, best_actions).squeeze(1) # (B,)
+
+            not_done = 1.0 - done.float()
+            q_target = reward + self.gamma * q_next_max * not_done
+            return q_target
         else:
             # YOUR IMPLEMENTATION HERE
             q_next_values = self.target_net(next_state) # (B, A)

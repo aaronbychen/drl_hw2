@@ -42,7 +42,12 @@ class DuelingQNetwork(nn.Module):
         """
         ############################
         # YOUR IMPLEMENTATION HERE #
+        features = self.feature_layer(state)
 
-        raise NotImplementedError
+        value = self.value_head(features) # (B, 1)
+        advantage = self.advantage_head(features) # (B, A)
+
+        advantage_mean = advantage.mean(dim=1, keepdim=True) # (B, 1)
+        Qs = value + (advantage - advantage_mean) # broadcast to (B, A)
         ############################
         return Qs

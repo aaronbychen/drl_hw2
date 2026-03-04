@@ -25,8 +25,12 @@ def get_epsilon(step, eps_min, eps_max, eps_steps):
     """
     ############################
     # YOUR IMPLEMENTATION HERE #
-
-    raise NotImplementedError
+    if eps_steps <= 0:
+        return eps_min
+    if step >= eps_steps:
+        return eps_min
+    frac = step / eps_steps
+    return eps_max - frac * (eps_max - eps_min)
     ############################
 
 def merge_videos(video_dir):

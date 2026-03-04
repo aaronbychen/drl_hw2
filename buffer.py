@@ -41,8 +41,14 @@ class ReplayBuffer:
         
         ############################
         # YOUR IMPLEMENTATION HERE #
+        self.state[self.idx] = torch.as_tensor(state, dtype=torch.float)
+        self.action[self.idx] = torch.as_tensor([action], dtype=torch.float)
+        self.reward[self.idx] = torch.as_tensor(reward, dtype=torch.float)
+        self.next_state[self.idx] = torch.as_tensor(next_state, dtype=torch.float)
+        self.done[self.idx] = torch.as_tensor(done, dtype=torch.int)
 
-
+        self.idx = (self.idx + 1) % self.capacity
+        self.size = min(self.size + 1, self.capacity)
         ############################
 
     def sample(self, batch_size):
@@ -53,8 +59,13 @@ class ReplayBuffer:
         # please transfer the data to the corresponding device before return
         ############################
         # YOUR IMPLEMENTATION HERE #
+        state = self.state[sample_idxs].to(self.device)
+        action = self.action[sample_idxs].to(self.device)
+        reward = self.reward[sample_idxs].to(self.device)
+        next_state = self.next_state[sample_idxs].to(self.device)
+        done = self.done[sample_idxs].to(self.device)
 
-
+        batch = (state, action, reward, next_state, done)
         ############################
         return batch
 

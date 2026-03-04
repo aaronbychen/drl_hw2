@@ -1,43 +1,23 @@
-# Python
+# python
 __pycache__/
-*.py[cod]
-*$py.class
+*.pyc
+*.pyo
 
-# Conda / virtual env (just in case)
-.env/
-.venv/
-env/
-venv/
-
-# Jupyter
+# jupyter
 .ipynb_checkpoints/
 
-# VS Code
+# vscode
 .vscode/
 
-# Hydra outputs
-outputs/
-multirun/
-
-# Experiment outputs / logs
-runs/
+# logs
 *.log
 
-# Model checkpoints / arrays / caches
-*.pt
-*.pth
-*.ckpt
-*.npy
-*.npz
-*.pkl
-
-# Media
-*.mp4
-*.gif
-
-# OS junk
+# os
 .DS_Store
 Thumbs.db
 
-# PDF
+# course handout
 DRL_Homework_2__new_.pdf
+
+# gallery
+gallery/

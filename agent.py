@@ -36,8 +36,9 @@ class DQNAgent:
 
         ############################
         # YOUR IMPLEMENTATION HERE #
-
-        raise NotImplementedError
+        state_tensor = torch.as_tensor(state, dtype=torch.float, device=self.device).unsqueeze(0)  # (1, state_dim)
+        q_values = self.q_net(state_tensor) # (1, action_dim)
+        action = torch.argmax(q_values, dim=1).item()
         ############################
         return action
 
@@ -51,7 +52,12 @@ class DQNAgent:
             raise NotImplementedError
         else:
             # YOUR IMPLEMENTATION HERE
-            raise NotImplementedError
+            q_next_values = self.target_net(next_state) # (B, A)
+            q_next_max = q_next_values.max(dim=1).values # (B,)
+
+            not_done = 1.0 - done.float()
+            q_target = reward + self.gamma * q_next_max * not_done
+            return q_target
 
     def get_Q(self, state, action, use_double_net=False) -> torch.Tensor:
         """
@@ -59,8 +65,15 @@ class DQNAgent:
         """
         ############################
         # YOUR IMPLEMENTATION HERE #
+        net = self.target_net if use_double_net else self.q_net
+        # state: (B, state_dim)
+        # net(state): (B, action_dim)
+        q_values = net(state)
         
-        raise NotImplementedError
+        action_idx = action.long() # (B, 1)
+        gathered = q_values.gather(1, action_idx) # (B, 1)
+        q_value = gathered.squeeze(1) # (B,)
+        return q_value
         ############################
 
     def update(self, batch, step, weights=None):

@@ -111,6 +111,10 @@ class PrioritizedReplayBuffer(ReplayBuffer):
         """
         Add a new experience to memory, and update it's priority to the max_priority.
         """
+        super().add(transition)
+        # self.idx was added 1 in super().add
+        idx_to_update = (self.idx - 1) % self.capacity 
+        self.weights[idx_to_update] = self.max_priority
 
 
     def sample(self, batch_size):
@@ -123,8 +127,26 @@ class PrioritizedReplayBuffer(ReplayBuffer):
         """
         ############################
         # YOUR IMPLEMENTATION HERE #
+        priorities = self.weights[:self.size]
 
-        raise NotImplementedError
+        probs = priorities / np.sum(priorities)
+
+        sample_idxs = np.random.choice(self.size, batch_size, replace=False, p=probs)
+
+        N = self.size
+        sampled_probs = probs[sample_idxs]
+        wgts = (1.0 / (N * sampled_probs)) ** self.beta
+
+        wgts = wgts / np.max(wgts)
+        weights = torch.as_tensor(wgts, dtype=torch.float, device=self.device)
+
+        state = self.state[sample_idxs].to(self.device)
+        action = self.action[sample_idxs].to(self.device)
+        reward = self.reward[sample_idxs].to(self.device)
+        next_state = self.next_state[sample_idxs].to(self.device)
+        done = self.done[sample_idxs].to(self.device)
+
+        batch = (state, action, reward, next_state, done)
         ############################
         return batch, weights, sample_idxs
 

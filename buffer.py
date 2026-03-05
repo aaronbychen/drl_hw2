@@ -84,10 +84,18 @@ class NStepReplayBuffer(ReplayBuffer):
         """Get n-step state, action, reward and done for the transition, discard those rewards after done=True"""
         ############################
         # YOUR IMPLEMENTATION HERE #
+        n_step_reward = 0
+        for i in range(self.n_step):
+            _, _, reward, done = self.n_step_buffer[i]
+            n_step_reward += reward * (self.gamma ** i)
+            if done:
+                state, action, _, _ = self.n_step_buffer[0]
+                return state, action, n_step_reward, done
 
-        raise NotImplementedError
+        state, action, _, _ = self.n_step_buffer[0]
+        _, _, _, done = self.n_step_buffer[-1]
         ############################
-        return state, action, reward, done
+        return state, action, n_step_reward, done
 
     def add(self, transition):
         state, action, reward, next_state, done = transition
@@ -161,12 +169,14 @@ class PrioritizedReplayBuffer(ReplayBuffer):
 
 
 # Avoid Diamond Inheritance
-class PrioritizedNStepReplayBuffer():
+class PrioritizedNStepReplayBuffer(PrioritizedReplayBuffer):
     def __init__(self, capacity, eps, alpha, beta, n_step, gamma, state_size, device):
         ############################
         # YOUR IMPLEMENTATION HERE #
-
-        raise NotImplementedError
+        super().__init__(capacity, eps, alpha, beta, state_size, device)
+        self.n_step = n_step
+        self.gamma = gamma
+        self.n_step_buffer = deque([], maxlen=n_step)
         ############################
     def __repr__(self) -> str:
         return f'Prioritized{self.n_step}StepReplayBuffer'
@@ -174,8 +184,31 @@ class PrioritizedNStepReplayBuffer():
     def add(self, transition):
         ############################
         # YOUR IMPLEMENTATION HERE #
-
-        raise NotImplementedError
+        state, action, reward, next_state, done = transition
+        self.n_step_buffer.append((state, action, reward, done))
+        if len(self.n_step_buffer) < self.n_step:
+            return
+        state, action, reward, done = self.n_step_handler()
+        super().add((state, action, reward, next_state, done))
         ############################
 
     # def the other necessary class methods as your need
+    def n_step_handler(self):
+        """Get n-step state, action, reward and done for the transition, discard those rewards after done=True"""
+        n_step_return = 0
+        for i in range(self.n_step):
+            _, _, reward, done = self.n_step_buffer[i]
+            n_step_return += reward * (self.gamma ** i)
+            if done:
+                state, action, _, _ = self.n_step_buffer[0]
+                return state, action, n_step_return, done
+
+        state, action, _, _ = self.n_step_buffer[0]
+        _, _, _, done = self.n_step_buffer[-1]
+        return state, action, n_step_return, done
+    
+    def sample(self, batch_size):
+        return super().sample(batch_size)
+
+    def update_priorities(self, data_idxs, priorities):
+        super().update_priorities(data_idxs, priorities)

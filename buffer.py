@@ -169,11 +169,11 @@ class PrioritizedReplayBuffer(ReplayBuffer):
 
 
 # Avoid Diamond Inheritance
-class PrioritizedNStepReplayBuffer():
+class PrioritizedNStepReplayBuffer(PrioritizedReplayBuffer):
     def __init__(self, capacity, eps, alpha, beta, n_step, gamma, state_size, device):
         ############################
         # YOUR IMPLEMENTATION HERE #
-        self.buffer = PrioritizedReplayBuffer(capacity, eps, alpha, beta, state_size, device)
+        super().__init__(capacity, eps, alpha, beta, state_size, device)
         self.n_step = n_step
         self.gamma = gamma
         self.n_step_buffer = deque([], maxlen=n_step)
@@ -189,7 +189,7 @@ class PrioritizedNStepReplayBuffer():
         if len(self.n_step_buffer) < self.n_step:
             return
         state, action, reward, done = self.n_step_handler()
-        self.buffer.add((state, action, reward, next_state, done))
+        super().add((state, action, reward, next_state, done))
         ############################
 
     # def the other necessary class methods as your need
@@ -208,7 +208,7 @@ class PrioritizedNStepReplayBuffer():
         return state, action, n_step_return, done
     
     def sample(self, batch_size):
-        return self.buffer.sample(batch_size)
+        return super().sample(batch_size)
 
     def update_priorities(self, data_idxs, priorities):
-        self.buffer.update_priorities(data_idxs, priorities)
+        super().update_priorities(data_idxs, priorities)

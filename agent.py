@@ -1,3 +1,8 @@
+"""
+Filename: agent.py
+Authors: Aaron Chen (517971), Sherlock Zhang (518915)
+"""
+
 import os
 import torch
 import torch.optim as optim

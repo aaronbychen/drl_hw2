@@ -1,3 +1,8 @@
+"""
+Filename: buffer.py
+Authors: Aaron Chen (517971), Sherlock Zhang (518915)
+"""
+
 import torch
 import numpy as np
 from collections import deque

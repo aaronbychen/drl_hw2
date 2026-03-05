@@ -1,3 +1,8 @@
+"""
+Filename: main.py
+Authors: Aaron Chen (517971), Sherlock Zhang (518915)
+"""
+
 import hydra
 import utils
 import torch

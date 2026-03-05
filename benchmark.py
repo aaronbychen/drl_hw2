@@ -1,3 +1,8 @@
+"""
+Filename: benchmark.py
+Authors: Aaron Chen (517971), Sherlock Zhang (518915)
+"""
+
 import time
 import torch
 import numpy as np

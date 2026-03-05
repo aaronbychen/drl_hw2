@@ -1,3 +1,8 @@
+"""
+Filename: model.py
+Authors: Aaron Chen (517971), Sherlock Zhang (518915)
+"""
+
 from hydra.utils import instantiate
 import torch.nn as nn
 

@@ -1,3 +1,8 @@
+"""
+Filename: core.py
+Authors: Aaron Chen (517971), Sherlock Zhang (518915)
+"""
+
 from copy import deepcopy
 import random
 import logging

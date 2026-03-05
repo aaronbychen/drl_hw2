@@ -1,3 +1,8 @@
+"""
+Filename: utils.py
+Authors: Aaron Chen (517971), Sherlock Zhang (518915)
+"""
+
 import os
 import glob
 import torch

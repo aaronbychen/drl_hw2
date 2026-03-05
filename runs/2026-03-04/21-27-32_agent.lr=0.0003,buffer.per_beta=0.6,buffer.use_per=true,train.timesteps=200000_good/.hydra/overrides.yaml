@@ -1,0 +1,4 @@
+- buffer.use_per=true
+- agent.lr=0.0003
+- train.timesteps=200000
+- buffer.per_beta=0.6

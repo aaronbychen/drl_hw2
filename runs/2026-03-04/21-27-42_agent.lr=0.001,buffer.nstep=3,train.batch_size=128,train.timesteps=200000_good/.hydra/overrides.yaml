@@ -1,0 +1,4 @@
+- buffer.nstep=3
+- agent.lr=0.001
+- train.batch_size=128
+- train.timesteps=200000

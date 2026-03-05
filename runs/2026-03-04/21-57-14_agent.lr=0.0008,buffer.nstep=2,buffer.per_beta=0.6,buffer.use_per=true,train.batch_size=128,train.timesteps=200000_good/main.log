@@ -1,0 +1,55 @@
+[2026-03-04 21:57:14,286][__main__][INFO] - Training for 200000 timesteps with NormalQNetwork and Prioritized2StepReplayBuffer
+[2026-03-04 21:57:32,271][core][INFO] - Step: 5000, Eval mean: -107.35811004638671, Eval std: 64.90871464681015
+[2026-03-04 21:57:50,351][core][INFO] - Step: 10000, Eval mean: -125.5624282836914, Eval std: 116.85941278526587
+[2026-03-04 21:58:09,968][core][INFO] - Step: 15000, Eval mean: -65.38286895751953, Eval std: 115.78553015434122
+[2026-03-04 21:58:29,249][core][INFO] - Step: 20000, Eval mean: -465.0454582214355, Eval std: 252.34311286082894
+[2026-03-04 21:58:49,725][core][INFO] - Step: 25000, Eval mean: -166.31904315948486, Eval std: 107.29418913274783
+[2026-03-04 21:59:12,065][core][INFO] - Step: 30000, Eval mean: -185.25789108276368, Eval std: 100.8505440783809
+[2026-03-04 21:59:34,819][core][INFO] - Step: 35000, Eval mean: -102.87210960388184, Eval std: 59.70722156280403
+[2026-03-04 22:00:05,279][core][INFO] - Step: 40000, Eval mean: -8.066339588165283, Eval std: 152.7668979826817
+[2026-03-04 22:00:33,426][core][INFO] - Step: 45000, Eval mean: -7.1808021545410154, Eval std: 150.2503934207502
+[2026-03-04 22:01:05,552][core][INFO] - Step: 50000, Eval mean: -31.315075159072876, Eval std: 61.820924256242115
+[2026-03-04 22:01:33,993][core][INFO] - Step: 55000, Eval mean: 58.97891731262207, Eval std: 241.77093703565234
+[2026-03-04 22:02:01,922][core][INFO] - Step: 60000, Eval mean: 94.71524391174316, Eval std: 150.66486313761425
+[2026-03-04 22:02:29,101][core][INFO] - Step: 65000, Eval mean: 197.97615966796874, Eval std: 22.058242540403533
+[2026-03-04 22:02:56,640][core][INFO] - Step: 70000, Eval mean: 189.39835572242737, Eval std: 68.77541636038504
+[2026-03-04 22:03:23,431][core][INFO] - Step: 75000, Eval mean: 190.88813858032228, Eval std: 81.97528961827624
+[2026-03-04 22:03:50,378][core][INFO] - Step: 80000, Eval mean: 185.4459783554077, Eval std: 80.97460328336946
+[2026-03-04 22:04:17,932][core][INFO] - Step: 85000, Eval mean: 185.79314346313475, Eval std: 82.25646608986501
+[2026-03-04 22:04:45,743][core][INFO] - Step: 90000, Eval mean: 200.02521629333495, Eval std: 77.47629433532032
+[2026-03-04 22:05:12,710][core][INFO] - Step: 95000, Eval mean: 209.70999755859376, Eval std: 54.37706268553282
+[2026-03-04 22:05:38,770][core][INFO] - Step: 100000, Eval mean: 232.0178436279297, Eval std: 26.659216052798623
+[2026-03-04 22:06:04,362][core][INFO] - Step: 105000, Eval mean: 25.64160614013672, Eval std: 303.6710917469842
+[2026-03-04 22:06:33,950][core][INFO] - Step: 110000, Eval mean: 131.26231231689454, Eval std: 95.74106219374819
+[2026-03-04 22:07:00,236][core][INFO] - Step: 115000, Eval mean: 229.37697372436523, Eval std: 53.45715106249367
+[2026-03-04 22:07:24,530][core][INFO] - Step: 120000, Eval mean: 226.12413330078124, Eval std: 88.58106573860663
+[2026-03-04 22:07:48,870][core][INFO] - Step: 125000, Eval mean: 233.27080688476562, Eval std: 76.90615553515899
+[2026-03-04 22:08:14,661][core][INFO] - Step: 130000, Eval mean: 143.3676956176758, Eval std: 216.3620651641365
+[2026-03-04 22:08:38,947][core][INFO] - Step: 135000, Eval mean: 197.96237335205078, Eval std: 129.03817205565852
+[2026-03-04 22:09:04,162][core][INFO] - Step: 140000, Eval mean: 211.5218376159668, Eval std: 87.63118952138412
+[2026-03-04 22:09:28,891][core][INFO] - Step: 145000, Eval mean: 200.67508239746093, Eval std: 128.5990975734964
+[2026-03-04 22:09:52,293][core][INFO] - Step: 150000, Eval mean: 196.76874160766602, Eval std: 104.89767098869004
+[2026-03-04 22:10:15,041][core][INFO] - Step: 155000, Eval mean: 81.51035652160644, Eval std: 171.70299330305787
+[2026-03-04 22:10:38,476][core][INFO] - Step: 160000, Eval mean: 189.05292282104492, Eval std: 114.63146622294856
+[2026-03-04 22:11:03,362][core][INFO] - Step: 165000, Eval mean: 224.6312225341797, Eval std: 52.52621398598651
+[2026-03-04 22:11:26,615][core][INFO] - Step: 170000, Eval mean: 235.41742019653321, Eval std: 110.62717937812732
+[2026-03-04 22:11:51,164][core][INFO] - Step: 175000, Eval mean: 244.24686431884766, Eval std: 38.544015769666636
+[2026-03-04 22:12:15,852][core][INFO] - Step: 180000, Eval mean: 216.64966278076173, Eval std: 111.43789535400332
+[2026-03-04 22:12:40,169][core][INFO] - Step: 185000, Eval mean: 204.0290771484375, Eval std: 89.12316107250362
+[2026-03-04 22:13:05,343][core][INFO] - Step: 190000, Eval mean: 252.48821105957032, Eval std: 26.33248534685974
+[2026-03-04 22:13:29,629][core][INFO] - Step: 195000, Eval mean: 243.64540405273436, Eval std: 43.422185924665186
+[2026-03-04 22:13:53,083][core][INFO] - Step: 200000, Eval mean: 189.5975700378418, Eval std: 128.9833525390157
+[2026-03-04 22:14:01,594][core][INFO] - Final Eval mean: 252.48821105957032, Eval std: 26.33248534685974
+[2026-03-04 22:14:02,110][py.warnings][WARNING] - /opt/homebrew/Caskroom/miniconda/base/envs/drl_hw2/lib/python3.10/site-packages/moviepy/video/io/ffmpeg_reader.py:123: UserWarning: Warning: in file final_videos/eval-episode-2.mp4, 720000 bytes wanted but 0 bytes read,at frame 190/191, at time 3.80/3.80 sec. Using the last valid frame instead.
+  warnings.warn("Warning: in file %s, "%(self.filename)+
+
+[2026-03-04 22:14:02,398][py.warnings][WARNING] - /opt/homebrew/Caskroom/miniconda/base/envs/drl_hw2/lib/python3.10/site-packages/moviepy/video/io/ffmpeg_reader.py:123: UserWarning: Warning: in file final_videos/eval-episode-4.mp4, 720000 bytes wanted but 0 bytes read,at frame 428/429, at time 8.56/8.56 sec. Using the last valid frame instead.
+  warnings.warn("Warning: in file %s, "%(self.filename)+
+
+[2026-03-04 22:14:02,508][py.warnings][WARNING] - /opt/homebrew/Caskroom/miniconda/base/envs/drl_hw2/lib/python3.10/site-packages/moviepy/video/io/ffmpeg_reader.py:123: UserWarning: Warning: in file final_videos/eval-episode-6.mp4, 720000 bytes wanted but 0 bytes read,at frame 172/173, at time 3.44/3.44 sec. Using the last valid frame instead.
+  warnings.warn("Warning: in file %s, "%(self.filename)+
+
+[2026-03-04 22:14:02,622][py.warnings][WARNING] - /opt/homebrew/Caskroom/miniconda/base/envs/drl_hw2/lib/python3.10/site-packages/moviepy/video/io/ffmpeg_reader.py:123: UserWarning: Warning: in file final_videos/eval-episode-8.mp4, 720000 bytes wanted but 0 bytes read,at frame 175/176, at time 3.50/3.50 sec. Using the last valid frame instead.
+  warnings.warn("Warning: in file %s, "%(self.filename)+
+
+[2026-03-04 22:14:04,331][__main__][INFO] - Finish training with eval mean: 252.48821105957032

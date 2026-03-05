@@ -1,0 +1,33 @@
+seed: 42
+env_name: LunarLander-v2
+train:
+  nstep: ${buffer.nstep}
+  timesteps: 150000
+  batch_size: 64
+  test_every: 5000
+  eps_max: 1
+  eps_min: 0.05
+  eps_steps: 50000
+  start_steps: 0
+  plot_interval: 5000
+  eval_interval: 5000
+  eval_episodes: 10
+agent:
+  gamma: 0.99
+  lr: 0.0008
+  tau: 0.005
+  nstep: ${buffer.nstep}
+  target_update_interval: 1
+  hidden_size: 128
+  activation:
+    _target_: torch.nn.ELU
+  use_dueling: false
+  use_double: true
+buffer:
+  capacity: 100000
+  use_per: false
+  nstep: 1
+  gamma: ${agent.gamma}
+  per_alpha: 0.7
+  per_beta: 0.4
+  per_eps: 0.01

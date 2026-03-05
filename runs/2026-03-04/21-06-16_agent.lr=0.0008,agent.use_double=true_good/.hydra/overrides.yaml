@@ -1,0 +1,2 @@
+- agent.use_double=true
+- agent.lr=0.0008

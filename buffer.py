@@ -1,20 +1,33 @@
 import torch
 import numpy as np
 from collections import deque
+from starr import SumTreeArray
 
 
 def get_buffer(cfg, **args):
     assert type(cfg.nstep) == int and cfg.nstep > 0, 'nstep must be a positive integer'
+
+    # bonus backward compatibility
+    use_sumtree = getattr(cfg, 'use_sumtree', False)
+    
     if not cfg.use_per:
         if cfg.nstep == 1:
             return ReplayBuffer(cfg.capacity, **args)
         else:
             return NStepReplayBuffer(cfg.capacity, cfg.nstep, cfg.gamma, **args)
     else:
-        if cfg.nstep == 1:
-            return PrioritizedReplayBuffer(cfg.capacity, cfg.per_eps, cfg.per_alpha, cfg.per_beta, **args)
+        if use_sumtree:
+            # bonus SumTree PER
+            if cfg.nstep == 1:
+                return SumTreePrioritizedReplayBuffer(cfg.capacity, cfg.per_eps, cfg.per_alpha, cfg.per_beta, **args)
+            else:
+                return SumTreePrioritizedNStepReplayBuffer(cfg.capacity, cfg.per_eps, cfg.per_alpha, cfg.per_beta, cfg.nstep, cfg.gamma, **args)
         else:
-            return PrioritizedNStepReplayBuffer(cfg.capacity, cfg.per_eps, cfg.per_alpha, cfg.per_beta, cfg.nstep, cfg.gamma, **args)
+            # older Numpy O(N) PER
+            if cfg.nstep == 1:
+                return PrioritizedReplayBuffer(cfg.capacity, cfg.per_eps, cfg.per_alpha, cfg.per_beta, **args)
+            else:
+                return PrioritizedNStepReplayBuffer(cfg.capacity, cfg.per_eps, cfg.per_alpha, cfg.per_beta, cfg.nstep, cfg.gamma, **args)
 
 
 class ReplayBuffer:
@@ -212,3 +225,90 @@ class PrioritizedNStepReplayBuffer(PrioritizedReplayBuffer):
 
     def update_priorities(self, data_idxs, priorities):
         super().update_priorities(data_idxs, priorities)
+
+class SumTreePrioritizedReplayBuffer(PrioritizedReplayBuffer):
+    def __init__(self, capacity, eps, alpha, beta, state_size, device):
+        super().__init__(capacity, eps, alpha, beta, state_size, device)
+        
+        self.tree = SumTreeArray(capacity, dtype='float32')
+        self.data_pointer = 0 
+
+    def add(self, transition):
+        state, action, reward, next_state, done = transition
+        data_idx = self.data_pointer
+        self.tree[data_idx] = self.max_priority
+        
+        self.state[data_idx] = torch.as_tensor(state, dtype=torch.float)
+        self.action[data_idx] = torch.as_tensor([action], dtype=torch.float)
+        self.reward[data_idx] = torch.as_tensor(reward, dtype=torch.float)
+        self.next_state[data_idx] = torch.as_tensor(next_state, dtype=torch.float)
+        self.done[data_idx] = torch.as_tensor(done, dtype=torch.int)
+        
+        self.data_pointer = (self.data_pointer + 1) % self.capacity
+        self.size = min(self.size + 1, self.capacity)
+
+    def sample(self, batch_size):
+        sample_idxs = self.tree.sample(batch_size)
+        priorities = self.tree[sample_idxs]
+        
+        total_priority = self.tree.sum()
+        probs = priorities / total_priority
+        
+        # prevent divide by zero
+        probs = np.maximum(probs, 1e-10)
+        
+        N = self.size
+        wgts = (1.0 / (N * probs)) ** self.beta
+        
+        # add denom by 1e-10, prevent zero in network -> inf / inf = NaN
+        wgts = wgts / (np.max(wgts) + 1e-10) 
+        
+        weights = torch.as_tensor(wgts, dtype=torch.float, device=self.device)
+        
+        state = self.state[sample_idxs].to(self.device)
+        action = self.action[sample_idxs].to(self.device)
+        reward = self.reward[sample_idxs].to(self.device)
+        next_state = self.next_state[sample_idxs].to(self.device)
+        done = self.done[sample_idxs].to(self.device)
+        
+        batch = (state, action, reward, next_state, done)
+        return batch, weights, sample_idxs
+
+    def update_priorities(self, data_idxs, priorities: np.ndarray):
+        priorities = (priorities + self.eps) ** self.alpha
+        self.tree[data_idxs] = priorities
+        self.max_priority = max(self.max_priority, np.max(priorities))
+
+    def __repr__(self) -> str:
+        return 'SumTreePrioritizedReplayBuffer'
+
+class SumTreePrioritizedNStepReplayBuffer(SumTreePrioritizedReplayBuffer):
+    def __init__(self, capacity, eps, alpha, beta, n_step, gamma, state_size, device):
+        super().__init__(capacity, eps, alpha, beta, state_size, device)
+        self.n_step = n_step
+        self.gamma = gamma
+        self.n_step_buffer = deque([], maxlen=n_step)
+
+    def __repr__(self) -> str:
+        return f'SumTreePrioritized{self.n_step}StepReplayBuffer'
+
+    def add(self, transition):
+        state, action, reward, next_state, done = transition
+        self.n_step_buffer.append((state, action, reward, done))
+        if len(self.n_step_buffer) < self.n_step:
+            return
+        state, action, reward, done = self.n_step_handler()
+        super().add((state, action, reward, next_state, done))
+
+    def n_step_handler(self):
+        n_step_return = 0
+        for i in range(self.n_step):
+            _, _, reward, done = self.n_step_buffer[i]
+            n_step_return += reward * (self.gamma ** i)
+            if done:
+                state, action, _, _ = self.n_step_buffer[0]
+                return state, action, n_step_return, done
+
+        state, action, _, _ = self.n_step_buffer[0]
+        _, _, _, done = self.n_step_buffer[-1]
+        return state, action, n_step_return, done

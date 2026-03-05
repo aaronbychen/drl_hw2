@@ -14,3 +14,4 @@ dependencies:
     - hydra-core==1.3.2
     - matplotlib==3.7.1
     - moviepy==1.0.3
+    - starr==0.3.2
